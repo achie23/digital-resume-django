@@ -1,0 +1,281 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+<!-- ================================
+Start SEO blocks
+================================= -->
+{% block title %}Brian's Resume - Home{% endblock %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+<!-- ================================
+END SEO blocks
+================================= -->
+
+<!-- ================================
+Start CSS blocks
+================================= -->
+{% block extend_header %}{% endblock %}
+<!-- ================================
+END CSS blocks
+================================= -->
+
+<!-- ================================
+Start script blocks
+================================= -->
+{% block extend_footer %}{% endblock %}
+<!-- ================================
+END script blocks
+================================= -->
+
+<!-- ================================
+Start Content
+================================= -->
+{% block content %}
+
+<section>
+  <div class="bannerSection">
+    <div class="container">
+      <div class="row g-4 g-md-3  align-items-center">
+        <div class="col-md-auto order-md-last">
+          <div class="bannerUserImg">
+            <a href="{{me.userprofile.avatar.url}}"><img src="{{me.userprofile.avatar.url}}" alt="..."></a>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="bannerContent">
+            <h1 class="xlTitle pb-3">Hi, I’m {{me.first_name|title}}, <br> a {{me.userprofile.title}}</h1>
+            <p>{{me.userprofile.bio}}</p>
+            <div class="bannerBtnCol">
+              <div class="row">
+                <div class="col-auto">
+                  <a download href="{{me.userprofile.cv.url}}" class="btn btnPrimary">Download Full Resume</a>
+                </div>
+                <div class="col-auto">
+                  <a href="{% url 'main:contact' %}" class="btn btnOutline">Contact Me</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sectionSpace pt-0">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-auto">
+          <div class="keySkillCol">
+            <h4 class="smTitle pb-3">Personal Skills</h4>
+            {% for key_skill in key_skills %}
+              {% if key_skill.is_key_skill %}
+              {% if key_skill.is_active %}
+                <div class="keySkillCard">
+                  <div class="ksIconCol">
+                    <img src="{{ key_skill.image.url }}" alt="...">
+                  </div>
+                  <span class="ksText">{{key_skill.name}}</span>
+                </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+  
+        <div class="col-md">
+          <h4 class="smTitle pb-3">Programming Skills</h4>
+          <div class="progressCol">
+            <div class="progressCard">
+              <div class="progressCol">
+                {% for skill in skills %}
+                  {% if skill.is_key_skill == False %}
+                  {% if skill.is_active %}
+                    <span class="progressLbl">{{skill.name}}</span>
+                    <div class="row g-2 align-items-center">
+                      <div class="col">
+                        <div class="progress progressStyle">
+                          <div class="progress-bar" role="progressbar" style="width: {{ skill.score }}%" aria-valuenow="{{ skill.score }}" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <span class="pLbl">{{skill.score}}%</span>
+                      </div>
+                    </div>
+                    </div>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sectionSpaceSm lightBg">
+    <div class="container">
+      <div class="row pb-3">
+        <div class="col">
+          <h4 class="smText regular">Certificates</h4>
+        </div>
+        <div class="col-auto">
+          <a href="javascript:void(0)" class="simpleLink">View all</a>
+        </div>
+      </div>
+      <div class="sliderOuter">
+        <div class="swiper certificatesSlider">
+          <div class="swiper-wrapper">
+            {% for certificate in certificates %}
+            {% if certificate.is_active %}
+            <div class="swiper-slide">
+              <div class="cardStyle1">
+                <h4 class="mdTitle cs1Title">
+                  <a href="javascript:void(0)">{{certificate.name}}</a>
+                </h4>
+                <ul class="cardOptionCol">
+                  <li>{{certificate.date.date}}</li>
+                  <li>{{certificate.title}}</li>
+                </ul>
+                <p>{{certificate.description}}</p>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="cert-swiper-button-next swiper-button-next swiperBtnStyle"></div>
+        <div class="cert-swiper-button-prev swiper-button-prev swiperBtnStyle"></div>
+        <div class="swiper-pagination swiperPaginationStyle posInitial"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sectionSpace">
+    <div class="container">
+      <div class="portfolioCol">
+        <div class="row pb-3">
+          <div class="col">
+            <h4 class="smText regular">Featured Projects</h4>
+          </div>
+          <div class="col-auto">
+            <a href="{% url 'main:portfolios' %}" class="simpleLink">View all</a>
+          </div>
+        </div>
+        <div class="portfolioCard">
+          {% for portfolio in portfolio %}
+            {% if portfolio.is_active %}
+            <div class="row g-4 align-items-center">
+              <div class="col-md-auto">
+                <div class="portfolioImgCol">
+                  <a href="{{ portfolio.image.url }}"><img src="{{ portfolio.image.url }}" alt="..."></a>
+                </div>
+              </div>
+              <div class="col-md">
+                <div class="portfolioContentCol">
+                  <h4 class="lgTitle"><a href="{% url 'main:portfolio' slug=portfolio.slug %}">{{portfolio.name}}</a></h4>
+                  <ul class="portfolioOption">
+                    <li><span class="dateLbl">{{portfolio.date.date}}</span></li>
+                    <li>{{portfolio.description}}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <hr>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="testimonialCol">
+        <h4 class="smText regular d-block">Testimonials</h4>
+        <div class="testimonialSlider">
+          <div class="swiper testimonialSwiper">
+            <div class="swiper-wrapper">
+              {% for testimonial in testimonials %}
+              {% if testimonial.is_active %}
+              <div class="swiper-slide">
+                <div class="testimonialCard">
+                  <div class="row align-items-center">
+                    <div class="col-sm-auto">
+                      <div class="tImgCol">
+                        <a href="{{ testimonial.thumbnail.url }}"><img src="{{ testimonial.thumbnail.url }}" alt="..."></a>
+                      </div>
+                    </div>
+                    <div class="col-sm">
+                      <div class="tContentCol">
+                        <h4 class="xsTitle bold">{{testimonial.quote|safe}}</h4>
+                        <p>{{testimonial.description|safe}}</p>
+                        <p>{{testimonial.name|safe}}</p>
+                        {{testimonial.role|safe}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+            <div class="test-swiper-button-next swiper-button-next swiperBtnStyle"></div>
+            <div class="test-swiper-button-prev swiper-button-prev swiperBtnStyle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sectionSpaceSm lightBg">
+    <div class="container">
+      <div class="row pb-3">
+        <div class="col">
+          <h4 class="smText regular">Recent Posts</h4>
+        </div>
+        <div class="col-auto">
+          <a href="{% url 'main:blogs' %}" class="simpleLink">View all</a>
+        </div>
+      </div>
+      <div class="row g-3">
+        {% for blog in blogs %}
+        {% if blog.is_active %}
+        <div class="col-lg-6">
+          <div class="cardStyle1">
+            <h4 class="mdTitle cs1Title"><a href="{% url 'main:blog' slug=blog.slug %}">{{blog.name|title}}</a></h4>
+            <ul class="cardOptionCol">
+              <li>{{blog.timestamp.date}}</li>
+              <li>{{blog.author|safe}}</li>
+            </ul>
+            <p>{{blog.description|safe}}</p>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        <!-- <div class="col-lg-6">
+          <div class="cardStyle1">
+            <h4 class="mdTitle cs1Title"><a href="javascript:void(0)">Using code to structure your marketplace</a></h4>
+            <ul class="cardOptionCol">
+              <li>08 Oct 2021</li>
+              <li>Django</li>
+            </ul>
+            <p>Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis
+              enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+<!-- ================================
+End Content
+================================= -->
